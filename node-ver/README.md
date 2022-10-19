@@ -4,7 +4,7 @@ This is node version of serverless chat application enhanced by aws tutorial
 
 ## Created by
 
-this repository including serverless locally by doing the following:
+This repository including serverless module locally by doing the following:
 
 - npm install serverless locally
 - delete files created by npm install
