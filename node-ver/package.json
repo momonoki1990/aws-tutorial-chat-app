@@ -10,9 +10,10 @@
     "node": ">=14.15.0"
   },
   "dependencies": {
-    "serverless": "^3.23.0",
     "@middy/core": "^3.4.0",
-    "@middy/http-json-body-parser": "^3.4.0"
+    "@middy/http-json-body-parser": "^3.4.0",
+    "dotenv": "^16.0.3",
+    "serverless": "^3.23.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",

@@ -1,5 +1,6 @@
 import type { AWS } from "@serverless/typescript";
 
+import connect from "@functions/connect";
 import hello from "@functions/hello";
 
 const serverlessConfiguration: AWS = {
@@ -17,6 +18,24 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
     },
+    iam: {
+      role: {
+        statements: [
+          {
+            Effect: "Allow",
+            Action: [
+              "dynamodb:Get*",
+              "dynamodb:Query",
+              "dynamodb:Scan",
+              "dynamodb:Delete*",
+              "dynamodb:Update*",
+              "dynamodb:PutItem",
+            ],
+            Resource: [{ "Fn::GetAtt": ["connectionsTable", "Arn"] }],
+          },
+        ],
+      },
+    },
   },
   resources: {
     Resources: {
@@ -24,6 +43,7 @@ const serverlessConfiguration: AWS = {
       connectionsTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
+          TableName: "${env:DB_TABLE_PREFIX}-${env:APP_STAGE}",
           KeySchema: [
             {
               AttributeName: "connectionId",
@@ -33,7 +53,7 @@ const serverlessConfiguration: AWS = {
           AttributeDefinitions: [
             { AttributeName: "connectionId", AttributeType: "S" },
           ],
-          // for on demand capacity, not provisioned
+          // NOTE: for on demand capacity, not provisioned
           BillingMode: "PAY_PER_REQUEST",
         },
         UpdateReplacePolicy: "Delete",
@@ -42,7 +62,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello },
+  functions: { connect, hello },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -56,6 +76,7 @@ const serverlessConfiguration: AWS = {
       concurrency: 10,
     },
   },
+  useDotenv: true,
 };
 
 module.exports = serverlessConfiguration;
