@@ -1,6 +1,7 @@
 import type { AWS } from "@serverless/typescript";
 
 import connect from "@functions/connect";
+import disconnect from "@functions/disconnect";
 import hello from "@functions/hello";
 
 const serverlessConfiguration: AWS = {
@@ -17,6 +18,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
+      DB_TABLE_NAME: "${env:DB_TABLE_PREFIX}-${env:APP_STAGE}",
     },
     iam: {
       role: {
@@ -62,7 +64,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { connect, hello },
+  functions: { connect, disconnect, hello },
   package: { individually: true },
   custom: {
     esbuild: {

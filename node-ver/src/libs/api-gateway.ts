@@ -25,5 +25,6 @@ export const handleError = (err: Error) => {
   return {
     statusCode: 500,
     message: err.message,
+    body: err.message,
   };
 };
