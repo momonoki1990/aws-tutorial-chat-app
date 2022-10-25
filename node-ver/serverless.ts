@@ -2,6 +2,7 @@ import type { AWS } from "@serverless/typescript";
 
 import connect from "@functions/connect";
 import disconnect from "@functions/disconnect";
+import defaultHandler from "@functions/default-handler";
 import hello from "@functions/hello";
 
 const serverlessConfiguration: AWS = {
@@ -64,7 +65,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { connect, disconnect, hello },
+  functions: { connect, disconnect, defaultHandler, hello },
   package: { individually: true },
   custom: {
     esbuild: {
