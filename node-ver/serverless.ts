@@ -19,7 +19,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
-      DB_TABLE_NAME: "${env:DB_TABLE_PREFIX}-${env:APP_STAGE}",
+      DB_TABLE_NAME: "${self:custom.DB_TABLE_NAME}",
     },
     iam: {
       role: {
@@ -46,7 +46,7 @@ const serverlessConfiguration: AWS = {
       connectionsTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
-          TableName: "${env:DB_TABLE_PREFIX}-${env:APP_STAGE}",
+          TableName: "${self:custom.DB_TABLE_NAME}",
           KeySchema: [
             {
               AttributeName: "connectionId",
@@ -78,6 +78,7 @@ const serverlessConfiguration: AWS = {
       platform: "node",
       concurrency: 10,
     },
+    DB_TABLE_NAME: "${env:DB_TABLE_PREFIX}-${sls:stage}",
   },
   useDotenv: true,
 };
