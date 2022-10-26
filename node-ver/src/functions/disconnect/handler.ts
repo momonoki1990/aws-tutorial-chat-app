@@ -1,5 +1,4 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse, handleError } from "@libs/api-gateway";
+import { handleError } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import DynamoDB from "aws-sdk/clients/dynamodb";
 import type {
@@ -7,7 +6,7 @@ import type {
   DeleteItemOutput,
 } from "aws-sdk/clients/dynamodb";
 
-const disconnect: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
+const disconnect = async (event) => {
   console.log("disconnect handler called");
 
   const ddb = new DynamoDB.DocumentClient();
@@ -29,7 +28,9 @@ const disconnect: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
 
   console.log(result);
 
-  return formatJSONResponse({});
+  return {
+    statusCode: 200,
+  };
 };
 
 export const main = middyfy(disconnect);

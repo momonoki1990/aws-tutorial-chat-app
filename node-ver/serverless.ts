@@ -4,7 +4,6 @@ import connect from "@functions/connect";
 import disconnect from "@functions/disconnect";
 import sendMessage from "@functions/send-message";
 import defaultHandler from "@functions/default-handler";
-import hello from "@functions/hello";
 
 const serverlessConfiguration: AWS = {
   service: "chat-app-node",
@@ -66,7 +65,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { connect, disconnect, sendMessage, defaultHandler, hello },
+  functions: { connect, disconnect, sendMessage, defaultHandler },
   package: { individually: true },
   custom: {
     esbuild: {

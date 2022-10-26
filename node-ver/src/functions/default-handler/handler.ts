@@ -1,9 +1,6 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse, handleError } from "@libs/api-gateway";
-import { middyfy } from "@libs/lambda";
+import { handleError } from "@libs/api-gateway";
 import ApiGatewayManagementApi from "aws-sdk/clients/apigatewaymanagementapi";
 
-// const defaultHandler: ValidatedEventAPIGatewayProxyEvent = async (event) => {
 const defaultHandler = async (event) => {
   console.log("defaultHandler has been called");
 
@@ -17,6 +14,7 @@ const defaultHandler = async (event) => {
       event.requestContext.domainName + "/" + event.requestContext.stage,
   });
 
+  // Get connection info
   try {
     connectionInfo = await callbackAPI
       .getConnection({ ConnectionId: event.requestContext.connectionId })
@@ -27,19 +25,23 @@ const defaultHandler = async (event) => {
 
   connectionInfo.connectionID = connectionId;
 
-  await callbackAPI
-    .postToConnection({
-      ConnectionId: event.requestContext.connectionId,
-      Data:
-        "Use the sendmessage route to send a message. Your info:" +
-        JSON.stringify(connectionInfo),
-    })
-    .promise();
+  // Send connection info to client
+  try {
+    await callbackAPI
+      .postToConnection({
+        ConnectionId: event.requestContext.connectionId,
+        Data:
+          "Use the sendmessage route to send a message. Your info:" +
+          JSON.stringify(connectionInfo),
+      })
+      .promise();
+  } catch (e) {
+    handleError(e);
+  }
 
   return {
     statusCode: 200,
   };
 };
 
-// export const main = middyfy(defaultHandler);
 export const main = defaultHandler;

@@ -1,6 +1,6 @@
-# Chat App Node version
+# Chat App (using node)
 
-This is node version of serverless chat application enhanced by aws tutorial
+This is serverless chat application enhanced by aws tutorial, using node
 
 ## Created by
 
@@ -11,10 +11,9 @@ This repository including serverless module locally by doing the following:
 - create sls project by sls create ($ npx sls create --template aws-nodejs-typescript --name chat-app-node --path ./)
 - write serveless into package.json dependencies
 
-## Commands
+## Deploy
 
 ```
-# Deploy
 $ npx sls deploy --stage {app stage e.g. production, dev} --region {region e.g. ap-northeast-1} --aws-profile {your aws profile name}
 ```
 
@@ -26,9 +25,23 @@ $ vim .env
 DB_TABLE={DynamoDB table name}
 ```
 
+## Connect and send message
+
+```
+$ npm i -g wscat
+$ wscat -c {lambda endpoint, e.g. wss://aaaaaaaaaa.execute-api.ap-northeast-1.amazonaws.com/{app stage}}
+Connected (press CTRL+C to quit)
+>
+< Use the sendmessage route to send a message.
+Your info:{"ConnectedAt":"2022-10-26T19:57:25.104Z","Identity":{"SourceIp":"xxx.xx.xxx.xxx","UserAgent":null},"LastActiveAt":"2022-10-26T19:57:26.361Z","connectionID":"aoOd1caFNjMCKVQ="}
+> {"action": "sendmessage", "message": "Hello all"}
+> %
+$
+```
+
 ---
 
-※ the following documents are created by sls create
+※ the following documents are created by 'sls create'
 
 # Serverless - AWS Node.js Typescript
 

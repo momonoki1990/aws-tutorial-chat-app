@@ -1,10 +1,9 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse, handleError } from "@libs/api-gateway";
+import { handleError } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import DynamoDB from "aws-sdk/clients/dynamodb";
 import type { PutItemInput, PutItemOutput } from "aws-sdk/clients/dynamodb";
 
-const connect: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
+const connect = async (event) => {
   console.log("connect handler called");
 
   const ddb = new DynamoDB.DocumentClient();
@@ -23,7 +22,9 @@ const connect: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
     handleError(err);
   }
 
-  return formatJSONResponse({});
+  return {
+    statusCode: 200,
+  };
 };
 
 export const main = middyfy(connect);

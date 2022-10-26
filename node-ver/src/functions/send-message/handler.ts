@@ -1,13 +1,12 @@
-import { formatJSONResponse, handleError } from "@libs/api-gateway";
+import { handleError } from "@libs/api-gateway";
 import DynamoDB from "aws-sdk/clients/dynamodb";
-import type { PutItemInput, PutItemOutput } from "aws-sdk/clients/dynamodb";
 import ApiGatewayManagementApi from "aws-sdk/clients/apigatewaymanagementapi";
 
 const ddb = new DynamoDB.DocumentClient();
 
 const sendMessage = async (event) => {
   console.log("sendMessage has been called");
-  // get current connections
+  // Get current connections
   let connections;
   try {
     connections = await ddb
@@ -26,16 +25,16 @@ const sendMessage = async (event) => {
   const message = JSON.parse(event.body).message;
   console.log(`Received message: ${message}`);
 
-  // send message to all clients
+  // Send message to all clients
   const sendMessages = connections.Items.map(async ({ connectionId }) => {
-    if (connectionId !== event.requestContext.connectionId) {
-      try {
-        await callbackAPI
-          .postToConnection({ ConnectionId: connectionId, Data: message })
-          .promise();
-      } catch (e) {
-        console.log(e);
-      }
+    // exclude the sender of the message
+    if (connectionId === event.requestContext.connectionId) return;
+    try {
+      await callbackAPI
+        .postToConnection({ ConnectionId: connectionId, Data: message })
+        .promise();
+    } catch (e) {
+      console.log(e);
     }
   });
 
