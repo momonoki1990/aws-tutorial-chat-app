@@ -21,15 +21,14 @@ $ npx sls deploy --stage {app stage e.g. production, dev} --region {region e.g. 
 
 ```
 $ vim .env
-
-DB_TABLE={DynamoDB table name}
+DB_TABLE_PREFIX={DynamoDB table name, finally the stage name will be added after this. e.g. ChatConnections -> ChatConnections-dev}
 ```
 
 ## Connect and send message
 
 ```
 $ npm i -g wscat
-$ wscat -c {lambda endpoint, e.g. wss://aaaaaaaaaa.execute-api.ap-northeast-1.amazonaws.com/{app stage}}
+$ wscat -c {lambda endpoint, e.g. wss://{api gateway id}}.execute-api.ap-northeast-1.amazonaws.com/{app stage}}
 Connected (press CTRL+C to quit)
 >
 < Use the sendmessage route to send a message.
@@ -38,6 +37,13 @@ Your info:{"ConnectedAt":"2022-10-26T19:57:25.104Z","Identity":{"SourceIp":"xxx.
 > %
 $
 ```
+
+## Reference
+
+- [チュートリアル: WebSocket API、Lambda、DynamoDB を使用したサーバーレスチャットアプリケーションの構築](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/websocket-api-chat-app.html)
+- [Serverless Framework - AWS Lambda Events - Websocket](https://www.serverless.com/framework/docs/providers/aws/events/websocket)
+- [Class: AWS.DynamoDB](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html)
+- [Class: AWS.ApiGatewayManagementApi](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/ApiGatewayManagementApi.html)
 
 ---
 
