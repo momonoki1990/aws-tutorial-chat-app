@@ -1,2 +1,5 @@
 # aws-tutorial-chat-app
-serverless chat app using API Gateway by aws tutoria:  https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/websocket-api-chat-app.html 
+
+Chat application using websocket feature of aws api gateway, reconstructed by node.js and golang using serverless framework.
+
+Original AWS tutorial: https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/websocket-api-chat-app.html 
