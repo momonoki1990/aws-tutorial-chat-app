@@ -14,7 +14,11 @@ This repository including serverless module locally by doing the following:
 ## Deploy
 
 ```
+# Deploy
 $ npx sls deploy --stage {app stage e.g. production, dev} --region {region e.g. ap-northeast-1} --aws-profile {your aws profile name}
+
+# Remove resources
+$ npx sls remove --stage {app stage e.g. production, dev} --region {region e.g. ap-northeast-1} --aws-profile {your aws profile name}
 ```
 
 ## Environment Variables
