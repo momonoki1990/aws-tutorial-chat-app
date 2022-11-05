@@ -1,4 +1,4 @@
-# Chat App (using node)
+# Chat App (using go)
 
 This is serverless chat application enhanced by aws tutorial, using go
 
@@ -8,17 +8,17 @@ This repository including serverless module locally by doing the following:
 
 - npm init --yes
 - npm install serverless locally
-- create serverless project by sls create ($ npx sls create --template aws-go-dep --name chat-app-go --path ./)
+- create serverless project by sls create ($ npx sls create --template aws-go-mod --name chat-app-go --path ./)
 - write node_modules to .gitignore
 
 ## Deploy
 
 ```
 # Deploy
-$
+$ sls deploy --region {aws region} --stage {stage e.g. dev}  --aws-profile {aws profile name}
 
 # Remove resources
-$
+$ sls remoove --region {aws region} --stage {stage e.g. dev}  --aws-profile {aws profile name}
 ```
 
 ## Environment Variables
