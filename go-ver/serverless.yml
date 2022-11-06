@@ -74,6 +74,10 @@ functions:
     handler: bin/connect
     events:
       - websocket: $connect
+  disconnect:
+    handler: bin/disconnect
+    events:
+      - websocket: $disconnect
   hello:
     handler: bin/hello
     events:
