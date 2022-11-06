@@ -10,15 +10,20 @@ This repository including serverless module locally by doing the following:
 - npm install serverless locally
 - create serverless project by sls create ($ npx sls create --template aws-go-mod --name chat-app-go --path ./)
 - write node_modules to .gitignore
+- install required package for build module: `go mod download github.com/aws/aws-lambda-go`
+  ※Firstly, I downloaded 'github.com/aws/aws-lambda-go v1.6.0' written in go.mod, but this does not include events.APIGatewayWebsocketProxyRequest, so did '$go get github.com/aws/aws-lambda-go' and upgraded to aws-lambda-go v1.34.1.
 
 ## Deploy
 
 ```
+# Build
+$ make build
+
 # Deploy
-$ sls deploy --region {aws region} --stage {stage e.g. dev}  --aws-profile {aws profile name}
+$ npx sls deploy --region {aws region} --stage {stage e.g. dev}  --aws-profile {aws profile name}
 
 # Remove resources
-$ sls remoove --region {aws region} --stage {stage e.g. dev}  --aws-profile {aws profile name}
+$ npx sls remoove --region {aws region} --stage {stage e.g. dev}  --aws-profile {aws profile name}
 ```
 
 ## Environment Variables

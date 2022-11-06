@@ -18,7 +18,7 @@ service: chat-app-go
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
@@ -52,10 +52,14 @@ provider:
 
 package:
   patterns:
-    - '!./**'
+    - "!./**"
     - ./bin/**
 
 functions:
+  default:
+    handler: bin/default
+    events:
+      - websocket: $default
   hello:
     handler: bin/hello
     events:
