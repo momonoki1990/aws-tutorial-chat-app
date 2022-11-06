@@ -24,31 +24,41 @@ provider:
   name: aws
   runtime: go1.x
 
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+  # you can overwrite defaults here
+  #  stage: dev
+  #  region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iam:
-#    role:
-#      statements:
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:ListBucket"
-#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:PutObject"
-#          Resource:
-#            Fn::Join:
-#              - ""
-#              - - "arn:aws:s3:::"
-#                - "Ref" : "ServerlessDeploymentBucket"
-#                - "/*"
+  # you can add statements to the Lambda function's IAM Role here
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:Get*"
+            - "dynamodb:Query"
+            - "dynamodb:Scan"
+            - "dynamodb:Delete*"
+            - "dynamodb:Update*"
+            - "dynamodb:PutItem"
+          Resource:
+            - "Fn::GetAtt": ["connectionsTable", "Arn"]
+  #        - Effect: "Allow"
+  #          Action:
+  #            - "s3:ListBucket"
+  #          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+  #        - Effect: "Allow"
+  #          Action:
+  #            - "s3:PutObject"
+  #          Resource:
+  #            Fn::Join:
+  #              - ""
+  #              - - "arn:aws:s3:::"
+  #                - "Ref" : "ServerlessDeploymentBucket"
+  #                - "/*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  # you can define service wide environment variables here
+  environment:
+    DB_TABLE_NAME: "${self:custom.DB_TABLE_NAME}"
 
 package:
   patterns:
@@ -60,6 +70,10 @@ functions:
     handler: bin/default
     events:
       - websocket: $default
+  connect:
+    handler: bin/connect
+    events:
+      - websocket: $connect
   hello:
     handler: bin/hello
     events:
@@ -114,8 +128,22 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
+resources:
+  Resources:
+    connectionsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "${self:custom.DB_TABLE_NAME}"
+        KeySchema:
+          - AttributeName: "connectionId"
+            KeyType: "HASH"
+        AttributeDefinitions:
+          - AttributeName: "connectionId"
+            AttributeType: "S"
+        # NOTE: for on demand capacity, not provisioned
+        BillingMode: "PAY_PER_REQUEST"
+      UpdateReplacePolicy: "Delete"
+      DeletionPolicy: "Delete"
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
@@ -124,3 +152,6 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+custom:
+  DB_TABLE_NAME: "${env:DB_TABLE_PREFIX}-${sls:stage}"
+useDotenv: true
