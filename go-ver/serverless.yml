@@ -78,6 +78,12 @@ functions:
     handler: bin/disconnect
     events:
       - websocket: $disconnect
+  sendmessage:
+    handler: bin/send_message
+    events:
+      - websocket:
+          route: sendmessage
+
   hello:
     handler: bin/hello
     events:
