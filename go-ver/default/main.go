@@ -24,6 +24,7 @@ func Handler(ctx context.Context, req *events.APIGatewayWebsocketProxyRequest) (
 
 	session := session.Must(session.NewSession(&aws.Config{}))
 
+	// Send default message to client
 	svc := apigatewaymanagementapi.New(session, &aws.Config{
 		Endpoint: aws.String(req.RequestContext.DomainName + "/" + req.RequestContext.Stage),
 	})

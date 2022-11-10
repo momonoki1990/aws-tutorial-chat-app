@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"os"
 
@@ -23,6 +22,7 @@ type Response events.APIGatewayProxyResponse
 func Handler(ctx context.Context, req *events.APIGatewayWebsocketProxyRequest) (Response, error) {
 	log.Println("Disconnect handler called")
 
+	// Delete connection id from DynamoDB
 	session := session.Must(session.NewSession(&aws.Config{}))
 
 	svc := dynamodb.New(session, &aws.Config{})
@@ -36,12 +36,10 @@ func Handler(ctx context.Context, req *events.APIGatewayWebsocketProxyRequest) (
 		},
 		ReturnValues: aws.String("ALL_OLD"),
 	}
-	result, err := svc.DeleteItem(param)
+	_, err := svc.DeleteItem(param)
 	if (err != nil) {
 		return Response{StatusCode: 500}, err
 	}
-	jsonData, err := json.Marshal(result)
-	log.Println(string(jsonData))
 	
 	return Response{StatusCode: 200}, nil
 }

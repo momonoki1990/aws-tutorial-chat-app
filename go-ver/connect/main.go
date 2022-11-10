@@ -22,6 +22,7 @@ type Response events.APIGatewayProxyResponse
 func Handler(ctx context.Context, req *events.APIGatewayWebsocketProxyRequest) (Response, error) {
 	log.Println("Connect handler called")
 
+	// Write connection id to DynamoDB
 	session := session.Must(session.NewSession(&aws.Config{}))
 
 	svc := dynamodb.New(session, &aws.Config{})
